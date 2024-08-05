@@ -1,0 +1,15 @@
+import { IUnsubscribe } from '@lirx/unsubscribe';
+import { IObserver } from '../../observer/type/observer.type.js';
+
+export interface IObservable<GValue> {
+  (emit: IObserver<GValue>): IUnsubscribeOfObservable;
+}
+
+export type IUnsubscribeOfObservable = IUnsubscribe;
+
+/* derived */
+
+export type IGenericObservable = IObservable<any>;
+
+export type IInferObservableGValue<GObservable extends IGenericObservable> =
+  GObservable extends IObservable<infer GValue> ? GValue : never;
