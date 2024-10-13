@@ -1,5 +1,4 @@
-import { futureUnsubscribe } from '@lirx/unsubscribe';
-import { noop } from '@lirx/utils';
+import { futureUndo, noop } from '@lirx/utils';
 import { defaultNotificationObserver } from '../../../../../../../../misc/notifications/default-notification-observer.js';
 import { IDefaultInNotificationsUnion } from '../../../../../../../../misc/notifications/default-notifications-union.type.js';
 import { IObserver } from '../../../../../../../../observer/type/observer.type.js';
@@ -16,7 +15,7 @@ export function notificationsToLastValueObservable<GValue>(
   return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
     let lastValue: GValue;
 
-    return futureUnsubscribe((unsubscribe: IUnsubscribeOfObservable): IUnsubscribeOfObservable => {
+    return futureUndo((unsubscribe: IUnsubscribeOfObservable): IUnsubscribeOfObservable => {
       return subscribe(
         defaultNotificationObserver<GValue>(
           /* next */ (value: GValue): void => {

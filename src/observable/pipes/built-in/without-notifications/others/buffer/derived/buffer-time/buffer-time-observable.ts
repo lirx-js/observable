@@ -1,4 +1,4 @@
-import { createTimeout, IAbortTimer } from '@lirx/utils';
+import { createTimeout, UndoFunction } from '@lirx/utils';
 import { IObserver } from '../../../../../../../../observer/type/observer.type.js';
 import {
   IObservable,
@@ -11,7 +11,7 @@ export function bufferTimeObservable<GValue>(
 ): IObservable<GValue[]> {
   return (emit: IObserver<GValue[]>): IUnsubscribeOfObservable => {
     let currentBuffer: GValue[] = [];
-    let abortTimeout: IAbortTimer | null = null;
+    let abortTimeout: UndoFunction | null = null;
 
     const unsubscribe: IUnsubscribeOfObservable = subscribe((value: GValue): void => {
       currentBuffer.push(value);

@@ -1,10 +1,10 @@
-import { futureUnsubscribe } from '@lirx/unsubscribe';
 import {
   AbortError,
   createEventListener,
-  INullish,
-  IRemoveEventListener,
+  futureUndo,
   isNullish,
+  Nullish,
+  UndoFunction,
 } from '@lirx/utils';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../type/observable.type.js';
 
@@ -18,8 +18,8 @@ export function toPromise<GValue>(
 ): Promise<GValue> {
   return new Promise<GValue>(
     (resolve: (value: GValue) => void, reject: (reason: any) => void): void => {
-      let removeAbortEventListener: IRemoveEventListener;
-      const signal: AbortSignal | INullish = options?.signal;
+      let removeAbortEventListener: UndoFunction;
+      const signal: AbortSignal | Nullish = options?.signal;
 
       if (!isNullish(signal)) {
         if (signal.aborted) {
@@ -33,7 +33,7 @@ export function toPromise<GValue>(
         }
       }
 
-      const unsubscribe: IUnsubscribeOfObservable = futureUnsubscribe(
+      const unsubscribe: IUnsubscribeOfObservable = futureUndo(
         (unsubscribe: IUnsubscribeOfObservable): IUnsubscribeOfObservable => {
           return subscribe((value: GValue): void => {
             if (removeAbortEventListener !== void 0) {

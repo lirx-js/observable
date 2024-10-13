@@ -1,4 +1,4 @@
-import { mergeUnsubscribeFunctions } from '@lirx/unsubscribe';
+import { mergeUndoFunctions } from '@lirx/utils';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../../misc/notifications/built-in/complete/complete-notification.constant.js';
 import { createErrorNotification } from '../../../../../../../misc/notifications/built-in/error/create-error-notification.js';
 import { createNextNotification } from '../../../../../../../misc/notifications/built-in/next/create-next-notification.js';
@@ -15,7 +15,7 @@ export function fromImageSource(src: string): IObservable<IFromImageSourceObserv
     let running: boolean = true;
     const image: HTMLImageElement = new Image();
 
-    const unsubscribeOfEvents = mergeUnsubscribeFunctions([
+    const unsubscribeOfEvents = mergeUndoFunctions([
       fromEventTarget(
         image,
         'load',
@@ -59,7 +59,7 @@ export function fromImageSource(src: string): IObservable<IFromImageSourceObserv
 //     } else {
 //       let running: boolean = true;
 //
-//       const unsubscribeOfEvents = mergeUnsubscribeFunctions([
+//       const unsubscribeOfEvents = mergeUndoFunctions([
 //         fromEventTarget(image, 'load')((): void => {
 //           unsubscribeOfEvents();
 //           emit(createNextNotification<HTMLImageElement>(image));

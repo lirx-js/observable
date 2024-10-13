@@ -1,11 +1,11 @@
-import { IUnsubscribe } from '@lirx/unsubscribe';
+import { UndoFunction } from '@lirx/utils';
 import { IObserver } from '../../observer/type/observer.type.js';
 
 export interface IObservable<GValue> {
   (emit: IObserver<GValue>): IUnsubscribeOfObservable;
 }
 
-export type IUnsubscribeOfObservable = IUnsubscribe;
+export type IUnsubscribeOfObservable = UndoFunction;
 
 /* derived */
 

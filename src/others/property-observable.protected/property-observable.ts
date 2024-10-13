@@ -1,9 +1,9 @@
+import { InferObjectValueFromPropertyKey } from '@lirx/utils';
 import { idle } from '../../observable/built-in/from/without-notifications/time-related/idle/idle.js';
 import { IObservable, IUnsubscribeOfObservable } from '../../observable/type/observable.type.js';
 import { IMulticastSource } from '../../observer-observable-pair/build-in/source/built-in/multicast-source/multicast-source.type.js';
 import { createMulticastReplayLastSource } from '../../observer-observable-pair/build-in/source/built-in/replay-last-source/derived/create-multicast-replay-last-source.js';
 import { IObserver } from '../../observer/type/observer.type.js';
-import { IObjectValueFromPropertyKey } from './object-value-from-property-key.type.js';
 import { IPropertyObserverOptions, propertyObserver } from './property-observer.js';
 
 const OBSERVED_PROPERTIES = new WeakMap<any, Map<any, IObservable<any>>>();
@@ -19,9 +19,9 @@ export function propertyObservable<GObject extends object, GPropertyKey extends 
   {
     getterSource = idle(),
     ...options
-  }: IPropertyObservableOptions<IObjectValueFromPropertyKey<GObject, GPropertyKey>> = {},
-): IObservable<IObjectValueFromPropertyKey<GObject, GPropertyKey>> {
-  type GValue = IObjectValueFromPropertyKey<GObject, GPropertyKey>;
+  }: IPropertyObservableOptions<InferObjectValueFromPropertyKey<GObject, GPropertyKey>> = {},
+): IObservable<InferObjectValueFromPropertyKey<GObject, GPropertyKey>> {
+  type GValue = InferObjectValueFromPropertyKey<GObject, GPropertyKey>;
 
   let propertiesMap: Map<any, IObservable<GValue>> | undefined = OBSERVED_PROPERTIES.get(obj);
 

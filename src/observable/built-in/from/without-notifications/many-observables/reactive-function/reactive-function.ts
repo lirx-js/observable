@@ -1,4 +1,4 @@
-import { IGenericFunction } from '@lirx/utils';
+import { GenericFunction } from '@lirx/utils';
 import { mapObservable } from '../../../../../pipes/built-in/without-notifications/observer-pipe-related/map/map-observable.js';
 import { IMapValueTupleToObservableTuple } from '../../../../../type/helpers/map-value-tuple-to-observable-tuple.type.js';
 import { IObservable } from '../../../../../type/observable.type.js';
@@ -7,13 +7,13 @@ import {
   ICombineLatestObservablesValues,
 } from '../combine-latest/combine-latest.js';
 
-export type IReactiveFunctionObservables<GFunction extends IGenericFunction> =
+export type IReactiveFunctionObservables<GFunction extends GenericFunction> =
   IMapValueTupleToObservableTuple<Parameters<GFunction>>;
-export type IReactiveFunctionReturn<GFunction extends IGenericFunction> = IObservable<
+export type IReactiveFunctionReturn<GFunction extends GenericFunction> = IObservable<
   ReturnType<GFunction>
 >;
 
-export function reactiveFunction<GFunction extends IGenericFunction>(
+export function reactiveFunction<GFunction extends GenericFunction>(
   observables: IReactiveFunctionObservables<GFunction>,
   fnc: GFunction,
 ): IReactiveFunctionReturn<GFunction> {

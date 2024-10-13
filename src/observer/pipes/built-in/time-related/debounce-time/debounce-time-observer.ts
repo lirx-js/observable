@@ -1,5 +1,4 @@
-import { IUnsubscribe } from '@lirx/unsubscribe';
-import { createTimeout, IAbortTimer } from '@lirx/utils';
+import { createTimeout, UndoFunction } from '@lirx/utils';
 import { IObserverWithCleanUp } from '../../../../type/observer-with-clean-up.type.js';
 import { IObserver } from '../../../../type/observer.type.js';
 
@@ -12,7 +11,7 @@ export function debounceTimeObserver<GValue>(
   emit: IObserver<GValue>,
   duration: number,
 ): IObserverWithCleanUp<GValue> {
-  let abortTimeout: IAbortTimer | null = null;
+  let abortTimeout: UndoFunction | null = null;
 
   const end = (): void => {
     if (abortTimeout !== null) {
@@ -20,7 +19,7 @@ export function debounceTimeObserver<GValue>(
     }
   };
 
-  return (value: GValue): IUnsubscribe => {
+  return (value: GValue): UndoFunction => {
     end();
 
     abortTimeout = createTimeout((): void => {

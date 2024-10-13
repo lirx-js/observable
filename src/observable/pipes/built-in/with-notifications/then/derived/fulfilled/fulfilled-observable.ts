@@ -1,4 +1,4 @@
-import { futureUnsubscribe } from '@lirx/unsubscribe';
+import { futureUndo } from '@lirx/utils';
 import { IErrorNotification } from '../../../../../../../misc/notifications/built-in/error/error-notification.type.js';
 import { IDefaultInNotificationsUnion } from '../../../../../../../misc/notifications/default-notifications-union.type.js';
 import { IObserver } from '../../../../../../../observer/type/observer.type.js';
@@ -17,7 +17,7 @@ export function fulfilledObservable<GInNextValue, GOut>(
     let childUnsubscribe: IUnsubscribeOfObservable;
     let lastValue: GInNextValue;
 
-    const unsubscribe: IUnsubscribeOfObservable = futureUnsubscribe(
+    const unsubscribe: IUnsubscribeOfObservable = futureUndo(
       (unsubscribe: IUnsubscribeOfObservable): IUnsubscribeOfObservable => {
         return subscribe((notification: IDefaultInNotificationsUnion<GInNextValue>): void => {
           switch (notification.name) {

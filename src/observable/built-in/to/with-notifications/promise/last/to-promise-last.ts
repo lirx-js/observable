@@ -1,10 +1,4 @@
-import {
-  AbortError,
-  createEventListener,
-  INullish,
-  IRemoveEventListener,
-  isNullish,
-} from '@lirx/utils';
+import { AbortError, createEventListener, isNullish, Nullish, UndoFunction } from '@lirx/utils';
 import { notificationsToLastValueObservable } from '../../../../../pipes/built-in/with-notifications/others/notifications-to-values/derived/notifications-to-last-value/notifications-to-last-value-observable.js';
 import { IObservable } from '../../../../../type/observable.type.js';
 import { IObservableToPromiseOptions } from '../../../without-notifications/promise/to-promise.js';
@@ -18,8 +12,8 @@ export function toPromiseLast<GValue>(
 ): Promise<GValue> {
   return new Promise<GValue>(
     (resolve: (value: GValue) => void, reject: (reason: any) => void): void => {
-      let removeAbortEventListener: IRemoveEventListener;
-      const signal: AbortSignal | INullish = options?.signal;
+      let removeAbortEventListener: UndoFunction;
+      const signal: AbortSignal | Nullish = options?.signal;
 
       if (!isNullish(signal)) {
         if (signal.aborted) {

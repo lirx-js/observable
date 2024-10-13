@@ -1,4 +1,4 @@
-import { IDistinctEqualFunctionOptions } from '@lirx/utils';
+import { DistinctEqualFunctionOptions } from '@lirx/utils';
 import { merge } from '../../../observable/built-in/from/without-notifications/many-observables/merge/merge.js';
 import { idle } from '../../../observable/built-in/from/without-notifications/time-related/idle/idle.js';
 import { distinctObservable } from '../../../observable/pipes/built-in/without-notifications/observer-pipe-related/distinct/distinct-observable.js';
@@ -28,7 +28,7 @@ function getObjectPropertyDescriptor<GValue>(
 const CACHE = new WeakMap<any, Map<PropertyKey, IObservable<any>>>();
 
 export interface ICreateObjectPropertyObservableOptions<GValue>
-  extends IDistinctEqualFunctionOptions<GValue> {
+  extends DistinctEqualFunctionOptions<GValue> {
   allowGetters?: 'throw' | 'warn' | 'allow';
 }
 

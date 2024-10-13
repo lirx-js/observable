@@ -1,6 +1,6 @@
-import { IUninitializedToken } from '@lirx/utils';
+import { UninitializedToken } from '@lirx/utils';
 
 export interface IVariation<GValue> {
-  readonly previous: GValue | IUninitializedToken;
+  readonly previous: GValue | UninitializedToken;
   readonly current: GValue;
 }

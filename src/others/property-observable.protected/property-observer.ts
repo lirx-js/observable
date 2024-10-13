@@ -1,14 +1,17 @@
-import { EQUAL_FUNCTION_STRICT_EQUAL, IEqualFunction } from '@lirx/utils';
+import {
+  EQUAL_FUNCTION_STRICT_EQUAL,
+  EqualFunction,
+  getPropertyDescriptor,
+  InferObjectValueFromPropertyKey,
+} from '@lirx/utils';
 import { idle } from '../../observable/built-in/from/without-notifications/time-related/idle/idle.js';
-import { getPropertyDescriptor } from './get-property-descriptor.js';
-import { IObjectValueFromPropertyKey } from './object-value-from-property-key.type.js';
 
 export interface IPropertyObserverOnChangeFunction<GValue> {
   (previousValue: GValue | undefined, currentValue: GValue): void;
 }
 
 export interface IPropertyObserverOptions<GValue> {
-  readonly equal?: IEqualFunction<GValue>;
+  readonly equal?: EqualFunction<GValue>;
   readonly getterSource?: (update: () => any) => any;
 }
 
@@ -18,13 +21,15 @@ type ISetFunction<GValue> = (value: GValue) => void;
 export function propertyObserver<GObject extends object, GPropertyKey extends PropertyKey>(
   obj: GObject,
   propertyKey: GPropertyKey,
-  onChange: IPropertyObserverOnChangeFunction<IObjectValueFromPropertyKey<GObject, GPropertyKey>>,
+  onChange: IPropertyObserverOnChangeFunction<
+    InferObjectValueFromPropertyKey<GObject, GPropertyKey>
+  >,
   {
     equal = EQUAL_FUNCTION_STRICT_EQUAL,
     getterSource = idle(),
-  }: IPropertyObserverOptions<IObjectValueFromPropertyKey<GObject, GPropertyKey>> = {},
+  }: IPropertyObserverOptions<InferObjectValueFromPropertyKey<GObject, GPropertyKey>> = {},
 ): void {
-  type GValue = IObjectValueFromPropertyKey<GObject, GPropertyKey>;
+  type GValue = InferObjectValueFromPropertyKey<GObject, GPropertyKey>;
 
   const descriptor: TypedPropertyDescriptor<GValue> | undefined = getPropertyDescriptor<
     GObject,

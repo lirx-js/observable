@@ -1,10 +1,4 @@
-import {
-  AbortError,
-  createEventListener,
-  IRemoveEventListener,
-  NetworkError,
-  noop,
-} from '@lirx/utils';
+import { AbortError, createEventListener, NetworkError, noop, UndoFunction } from '@lirx/utils';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../../misc/notifications/built-in/complete/complete-notification.constant.js';
 import { createDownloadProgressNotification } from '../../../../../../../misc/notifications/built-in/download-progress/create-download-progress-notification.js';
 import { createErrorNotification } from '../../../../../../../misc/notifications/built-in/error/create-error-notification.js';
@@ -118,7 +112,7 @@ export function fromXHR(
         }
       };
 
-      const removeReadyStateChangeEventListener: IRemoveEventListener = createEventListener<Event>(
+      const removeReadyStateChangeEventListener: UndoFunction = createEventListener<Event>(
         xhr,
         'readystatechange',
         (): void => {
@@ -137,13 +131,13 @@ export function fromXHR(
         },
       );
 
-      const removeLoadEventListener: IRemoveEventListener = createEventListener<Event>(
+      const removeLoadEventListener: UndoFunction = createEventListener<Event>(
         xhr,
         'load',
         complete,
       );
 
-      const removeErrorEventListener: IRemoveEventListener = createEventListener<Event>(
+      const removeErrorEventListener: UndoFunction = createEventListener<Event>(
         xhr,
         'error',
         (): void => {
@@ -153,19 +147,19 @@ export function fromXHR(
 
       const removeAbortEventListener = createEventListener<Event>(xhr, 'abort', abort);
 
-      const removeDownloadProgressEventListener: IRemoveEventListener = createEventListener<
+      const removeDownloadProgressEventListener: UndoFunction = createEventListener<
         ProgressEvent<XMLHttpRequestEventTarget>
       >(xhr, 'progress', (event: ProgressEvent<XMLHttpRequestEventTarget>): void => {
         downloadProgress(createProgressFromProgressEvent(event));
       });
 
-      const removeUploadProgressEventListener: IRemoveEventListener = createEventListener<
+      const removeUploadProgressEventListener: UndoFunction = createEventListener<
         ProgressEvent<XMLHttpRequestEventTarget>
       >(xhr.upload, 'progress', (event: ProgressEvent<XMLHttpRequestEventTarget>): void => {
         uploadProgress(createProgressFromProgressEvent(event));
       });
 
-      const removeUploadCompleteEventListener: IRemoveEventListener = createEventListener<
+      const removeUploadCompleteEventListener: UndoFunction = createEventListener<
         ProgressEvent<XMLHttpRequestEventTarget>
       >(xhr.upload, 'load', uploadComplete);
 

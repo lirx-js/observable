@@ -1,4 +1,4 @@
-import { futureUnsubscribe, IRunning, mergeUnsubscribeFunctions } from '@lirx/unsubscribe';
+import { futureUndo, IsRunningFunction, mergeUndoFunctions } from '@lirx/utils';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../misc/notifications/built-in/complete/complete-notification.constant.js';
 import { createErrorNotification } from '../../../../../../misc/notifications/built-in/error/create-error-notification.js';
 import { createNextNotification } from '../../../../../../misc/notifications/built-in/next/create-next-notification.js';
@@ -34,12 +34,15 @@ export function anyWithNotifications<
       const errored: boolean[] = Array.from({ length });
       let errorCount: number = 0;
 
-      return futureUnsubscribe(
-        (unsubscribe: IUnsubscribeOfObservable, running: IRunning): IUnsubscribeOfObservable => {
-          return mergeUnsubscribeFunctions(
+      return futureUndo(
+        (
+          unsubscribe: IUnsubscribeOfObservable,
+          running: IsRunningFunction,
+        ): IUnsubscribeOfObservable => {
+          return mergeUndoFunctions(
             observables.map(
               (subscribe: IGenericObservable, index: number): IUnsubscribeOfObservable => {
-                return futureUnsubscribe(
+                return futureUndo(
                   (localUnsubscribe: IUnsubscribeOfObservable): IUnsubscribeOfObservable => {
                     return subscribe(
                       defaultNotificationObserver<GValues>(

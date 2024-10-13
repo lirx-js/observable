@@ -1,22 +1,14 @@
-import { createEventListener, INullish, IRemoveEventListener, isNullish, noop } from '@lirx/utils';
-import {
-  STATIC_COMPLETE_NOTIFICATION
-} from '../../../../../../misc/notifications/built-in/complete/complete-notification.constant.js';
-import {
-  createErrorNotification
-} from '../../../../../../misc/notifications/built-in/error/create-error-notification.js';
-import {
-  createAbortErrorNotification
-} from '../../../../../../misc/notifications/built-in/error/derived/create-abort-error-notification.js';
-import {
-  createNextNotification
-} from '../../../../../../misc/notifications/built-in/next/create-next-notification.js';
+import { createEventListener, isNullish, noop, Nullish, UndoFunction } from '@lirx/utils';
+import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../misc/notifications/built-in/complete/complete-notification.constant.js';
+import { createErrorNotification } from '../../../../../../misc/notifications/built-in/error/create-error-notification.js';
+import { createAbortErrorNotification } from '../../../../../../misc/notifications/built-in/error/derived/create-abort-error-notification.js';
+import { createNextNotification } from '../../../../../../misc/notifications/built-in/next/create-next-notification.js';
 import { IObserver } from '../../../../../../observer/type/observer.type.js';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type.js';
 import {
   IFromPromiseFactoryCreatePromiseFunction,
   IFromPromiseFactoryObservableNotifications,
-  IFromPromiseFactoryObservableOptions
+  IFromPromiseFactoryObservableOptions,
 } from './from-promise-factory-observable-notifications.type.js';
 
 /**
@@ -32,7 +24,7 @@ export function fromPromiseFactory<GValue>(
 ): IObservable<IFromPromiseFactoryObservableNotifications<GValue>> {
   type GNotificationsUnion = IFromPromiseFactoryObservableNotifications<GValue>;
 
-  const signal: AbortSignal | INullish = options?.signal;
+  const signal: AbortSignal | Nullish = options?.signal;
 
   return (emit: IObserver<GNotificationsUnion>): IUnsubscribeOfObservable => {
     if (signal?.aborted) {
@@ -77,7 +69,7 @@ export function fromPromiseFactory<GValue>(
         }
       };
 
-      let removeAbortEventListener: IRemoveEventListener;
+      let removeAbortEventListener: UndoFunction;
 
       if (!isNullish(signal)) {
         removeAbortEventListener = createEventListener<Event>(signal, 'abort', (): void => {

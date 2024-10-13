@@ -1,4 +1,4 @@
-import { createImmediate, IAbortTimer } from '@lirx/utils';
+import { createImmediate, UndoFunction } from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type.js';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type.js';
 
@@ -6,7 +6,7 @@ export function debounceImmediateObservable<GValue>(
   subscribe: IObservable<GValue>,
 ): IObservable<GValue> {
   return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
-    let abortTimeout: IAbortTimer | null = null;
+    let abortTimeout: UndoFunction | null = null;
 
     const unsubscribe: IUnsubscribeOfObservable = subscribe((value: GValue): void => {
       if (abortTimeout !== null) {

@@ -1,4 +1,4 @@
-import { createEventListener, IRemoveEventListener } from '@lirx/utils';
+import { createEventListener, UndoFunction } from '@lirx/utils';
 import { STATIC_COMPLETE_NOTIFICATION } from '../../../../../../misc/notifications/built-in/complete/complete-notification.constant.js';
 import { createErrorNotification } from '../../../../../../misc/notifications/built-in/error/create-error-notification.js';
 import { createAbortErrorNotification } from '../../../../../../misc/notifications/built-in/error/derived/create-abort-error-notification.js';
@@ -65,24 +65,30 @@ export function readBlob<GReadType extends IFileReaderReadType>(
       }
     };
 
-    const removeLoadEventListener: IRemoveEventListener = createEventListener<
-      ProgressEvent<FileReader>
-    >(fileReader, 'load', (): void => {
-      next(fileReader.result as GReturnType);
-      complete();
-    });
+    const removeLoadEventListener: UndoFunction = createEventListener<ProgressEvent<FileReader>>(
+      fileReader,
+      'load',
+      (): void => {
+        next(fileReader.result as GReturnType);
+        complete();
+      },
+    );
 
-    const removeErrorEventListener: IRemoveEventListener = createEventListener<
-      ProgressEvent<FileReader>
-    >(fileReader, 'error', (): void => {
-      error(fileReader.error);
-    });
+    const removeErrorEventListener: UndoFunction = createEventListener<ProgressEvent<FileReader>>(
+      fileReader,
+      'error',
+      (): void => {
+        error(fileReader.error);
+      },
+    );
 
-    const removeAbortEventListener: IRemoveEventListener = createEventListener<
-      ProgressEvent<FileReader>
-    >(fileReader, 'abort', abort);
+    const removeAbortEventListener: UndoFunction = createEventListener<ProgressEvent<FileReader>>(
+      fileReader,
+      'abort',
+      abort,
+    );
 
-    const removeProgressEventListener: IRemoveEventListener = createEventListener<
+    const removeProgressEventListener: UndoFunction = createEventListener<
       ProgressEvent<FileReader>
     >(fileReader, 'progress', (event: ProgressEvent<FileReader>): void => {
       progress(createProgressFromProgressEvent(event));

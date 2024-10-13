@@ -1,4 +1,4 @@
-import { futureUnsubscribe, IRunning, mergeUnsubscribeFunctions } from '@lirx/unsubscribe';
+import { futureUndo, IsRunningFunction, mergeUndoFunctions } from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type.js';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type.js';
 
@@ -7,9 +7,12 @@ export function takeUntilObservable<GValue>(
   until: IObservable<any>,
 ): IObservable<GValue> {
   return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
-    return futureUnsubscribe(
-      (unsubscribe: IUnsubscribeOfObservable, running: IRunning): IUnsubscribeOfObservable => {
-        return mergeUnsubscribeFunctions([
+    return futureUndo(
+      (
+        unsubscribe: IUnsubscribeOfObservable,
+        running: IsRunningFunction,
+      ): IUnsubscribeOfObservable => {
+        return mergeUndoFunctions([
           until(unsubscribe),
           subscribe((value: GValue): void => {
             if (running()) {

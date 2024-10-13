@@ -1,11 +1,11 @@
-import { IUnsubscribe } from '@lirx/unsubscribe';
+import { UndoFunction } from '@lirx/utils';
 
 /**
  * @deprecated
  * @experimental
  */
 export interface IObserverWithCleanUp<GValue> {
-  (value: GValue): IUnsubscribe;
+  (value: GValue): UndoFunction;
 }
 
 // /* derived */

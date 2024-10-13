@@ -1,4 +1,4 @@
-import { futureUnsubscribe, IRunning } from '@lirx/unsubscribe';
+import { futureUndo, IsRunningFunction } from '@lirx/utils';
 import { ICompleteNotification } from '../../../../../../misc/notifications/built-in/complete/complete-notification.type.js';
 import { IErrorNotification } from '../../../../../../misc/notifications/built-in/error/error-notification.type.js';
 import { IGenericNotification } from '../../../../../../misc/notifications/notification.type.js';
@@ -20,8 +20,11 @@ export function autoUnsubscribeObservableWithNotifications<
   GNotifications extends IAutoUnsubscribeObservableNotifications,
 >(subscribe: IObservable<GNotifications>): IObservable<GNotifications> {
   return (emit: IObserver<GNotifications>): IUnsubscribeOfObservable => {
-    return futureUnsubscribe(
-      (unsubscribe: IUnsubscribeOfObservable, running: IRunning): IUnsubscribeOfObservable => {
+    return futureUndo(
+      (
+        unsubscribe: IUnsubscribeOfObservable,
+        running: IsRunningFunction,
+      ): IUnsubscribeOfObservable => {
         return subscribe((notification: GNotifications): void => {
           if (running()) {
             if (notification.name === 'complete' || notification.name === 'error') {

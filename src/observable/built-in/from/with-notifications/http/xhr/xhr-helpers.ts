@@ -1,4 +1,4 @@
-import { AbortError, createEventListener, IRemoveEventListener, NetworkError } from '@lirx/utils';
+import { AbortError, createEventListener, NetworkError, UndoFunction } from '@lirx/utils';
 
 /** TYPES **/
 
@@ -101,15 +101,15 @@ export function initXHRFromRequest(
 
     setHeadersIntoXHR(request.headers, xhr);
 
-    const removeLoadEventListener: IRemoveEventListener = createEventListener<
+    const removeLoadEventListener: UndoFunction = createEventListener<
       ProgressEvent<XMLHttpRequestEventTarget>
     >(xhr, 'load', end);
 
-    const removeErrorEventListener: IRemoveEventListener = createEventListener<
+    const removeErrorEventListener: UndoFunction = createEventListener<
       ProgressEvent<XMLHttpRequestEventTarget>
     >(xhr, 'error', end);
 
-    const removeAbortEventListener: IRemoveEventListener = createEventListener<Event>(
+    const removeAbortEventListener: UndoFunction = createEventListener<Event>(
       request.signal,
       'abort',
       (): void => {
@@ -294,7 +294,7 @@ export function XHRResponseToReadableStream(
         }
       };
 
-      const removeLoadEventListener: IRemoveEventListener = createEventListener<Event>(
+      const removeLoadEventListener: UndoFunction = createEventListener<Event>(
         xhr,
         'load',
         (): void => {
@@ -308,7 +308,7 @@ export function XHRResponseToReadableStream(
         },
       );
 
-      const removeErrorEventListener: IRemoveEventListener = createEventListener<Event>(
+      const removeErrorEventListener: UndoFunction = createEventListener<Event>(
         xhr,
         'error',
         (): void => {
@@ -321,7 +321,7 @@ export function XHRResponseToReadableStream(
         },
       );
 
-      const removeAbortEventListener: IRemoveEventListener = createEventListener<Event>(
+      const removeAbortEventListener: UndoFunction = createEventListener<Event>(
         xhr,
         'abort',
         (): void => {
@@ -330,7 +330,7 @@ export function XHRResponseToReadableStream(
         },
       );
 
-      let removeProgressEventListener: IRemoveEventListener;
+      let removeProgressEventListener: UndoFunction;
 
       if (isStreamableResponseType) {
         removeProgressEventListener = createEventListener<Event>(xhr, 'progress', progress);
@@ -382,7 +382,7 @@ export function XHRResponseToReadableStream(
 //           }
 //         };
 //
-//         const removeLoadEventListener: IRemoveEventListener = createEventListener<'load', Event>(
+//         const removeLoadEventListener: UndoFunction = createEventListener<'load', Event>(
 //           toTypedEventTarget(xhr),
 //           'load',
 //           (): void => {
@@ -396,7 +396,7 @@ export function XHRResponseToReadableStream(
 //           },
 //         );
 //
-//         const removeErrorEventListener: IRemoveEventListener = createEventListener<'error', Event>(
+//         const removeErrorEventListener: UndoFunction = createEventListener<'error', Event>(
 //           toTypedEventTarget(xhr),
 //           'error',
 //           (): void => {
@@ -405,7 +405,7 @@ export function XHRResponseToReadableStream(
 //           },
 //         );
 //
-//         let removeProgressEventListener: IRemoveEventListener;
+//         let removeProgressEventListener: UndoFunction;
 //
 //         if (isStreamableResponseType) {
 //           removeProgressEventListener = createEventListener<'progress', Event>(
@@ -415,7 +415,7 @@ export function XHRResponseToReadableStream(
 //           );
 //         }
 //
-//         let removeAbortEventListener: IRemoveEventListener;
+//         let removeAbortEventListener: UndoFunction;
 //
 //         if (signal !== void 0) {
 //           removeAbortEventListener = createEventListener<'abort', Event>(

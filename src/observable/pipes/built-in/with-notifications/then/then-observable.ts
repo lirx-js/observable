@@ -1,4 +1,4 @@
-import { futureUnsubscribe } from '@lirx/unsubscribe';
+import { futureUndo } from '@lirx/utils';
 import { defaultNotificationObserver } from '../../../../../misc/notifications/default-notification-observer.js';
 import { IDefaultInNotificationsUnion } from '../../../../../misc/notifications/default-notifications-union.type.js';
 import { IObserver } from '../../../../../observer/type/observer.type.js';
@@ -18,7 +18,7 @@ export function thenObservable<GInNextValue, GOut>(
     let childUnsubscribe: IUnsubscribeOfObservable;
     let lastValue: GInNextValue;
 
-    const unsubscribe: IUnsubscribeOfObservable = futureUnsubscribe(
+    const unsubscribe: IUnsubscribeOfObservable = futureUndo(
       (unsubscribe: IUnsubscribeOfObservable): IUnsubscribeOfObservable => {
         return subscribe(
           defaultNotificationObserver<GInNextValue>(

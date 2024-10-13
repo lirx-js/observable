@@ -1,4 +1,4 @@
-import { createTimeout, IAbortTimer } from '@lirx/utils';
+import { createTimeout, UndoFunction } from '@lirx/utils';
 import { IObserver } from '../../../../../../observer/type/observer.type.js';
 import { IObservable, IUnsubscribeOfObservable } from '../../../../../type/observable.type.js';
 import { IThrottleTimeObservablePipeOptions } from './throttle-time-observable-pipe-options.type.js';
@@ -11,7 +11,7 @@ export function throttleTimeObservable<GValue>(
   return (emit: IObserver<GValue>): IUnsubscribeOfObservable => {
     let lastSendValueTime: number = leading ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
 
-    let abortTimeout: IAbortTimer | null = null;
+    let abortTimeout: UndoFunction | null = null;
     let trailingValue: GValue;
 
     const _emit = (value: GValue): void => {
